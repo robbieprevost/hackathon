@@ -27,16 +27,18 @@ exports.get = function(Action, Feature, io, actions){
           }
           if(data[0].title == 'upvote'){
               Feature.find({id:data[0].data}, function(err, features){
-                  features[0].upvotes = features[0].upvotes + 1;
-                  features[0].save(function(){
-                      var dataToSet = {
-                          title: 'emit features',
-                          data: {
-                              features: features
-                          }
-                      };
-                      actions.set(Action, dataToSet);
-                  });
+                  if(features[0]) {
+                      features[0].upvotes = features[0].upvotes + 1;
+                      features[0].save(function () {
+                          var dataToSet = {
+                              title: 'emit features',
+                              data: {
+                                  features: features
+                              }
+                          };
+                          actions.set(Action, dataToSet);
+                      });
+                  }
               })
           }
           data[0].remove();

@@ -54,13 +54,22 @@ var myController = myApp.controller('myController', function($scope){
             var upvotes = $scope.data.features[whichFeature].upvotes++;
             var downvotes = $scope.data.features[whichFeature].downvotes;
             $scope.data.features[whichFeature].score = $scope.data.score(upvotes, downvotes);
-            $scope.socket.emit('upvote', whichFeature);
+            $scope.data.upvotes[$scope.data.upvotes.length] = {
+                feature: whichFeature,
+                vote: 1
+            }
         },
+        upvotes : [],
+        downvotes : [],
         downvote : function(id){
             var whichFeature = parseInt(id);
             var upvotes = $scope.data.features[whichFeature].upvotes;
             var downvotes = $scope.data.features[whichFeature].downvotes++;
             $scope.data.features[whichFeature].score = $scope.data.score(upvotes, downvotes);
+            $scope.data.downvotes[$scope.data.downvotes.length] = {
+                feature: whichFeature,
+                vote: 1
+            }
         },
         score: function(upvotes, downvotes){
             var score = upvotes/downvotes;
@@ -100,7 +109,6 @@ var myController = myApp.controller('myController', function($scope){
                     }
                 }
             }
-
         });
        return socket;
     }
