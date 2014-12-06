@@ -55,6 +55,10 @@ body {
     color: #eeeeee;
 }
 
+.comment {
+    color: #eeeecc
+}
+
 .back {
     position: absolute;
     left: 10px;
