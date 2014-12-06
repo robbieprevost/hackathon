@@ -110,6 +110,7 @@ var myController = myApp.controller('myController', function($scope){
                 }
             }
         });
+
        return socket;
     }
 });

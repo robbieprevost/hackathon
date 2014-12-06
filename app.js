@@ -165,7 +165,6 @@ io.on('connection', function(socket){
         dataToSet = {
             title: 'upvote',
             data: data
-
         };
         actions.set(Action, dataToSet);
     })
