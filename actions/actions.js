@@ -16,7 +16,6 @@ exports.get = function(Action, Feature, io, actions){
                   var dataToSet = {
                       title: 'emit features',
                       data: {
-                          socket: socketId,
                           features: features
                       }
                   };
@@ -26,9 +25,23 @@ exports.get = function(Action, Feature, io, actions){
           if(data[0].title == 'emit features'){
               io.emit('features', data[0].data.features);
           }
+          if(data[0].title == 'upvote'){
+              Feature.find({id:data[0].data}, function(err, features){
+                  features[0].upvotes = features[0].upvotes + 1;
+                  features[0].save(function(){
+                      var dataToSet = {
+                          title: 'emit features',
+                          data: {
+                              features: features
+                          }
+                      };
+                      actions.set(Action, dataToSet);
+                  });
+              })
+          }
           data[0].remove();
       }else{
-          console.log('no actions');
+
       }
   });
 };

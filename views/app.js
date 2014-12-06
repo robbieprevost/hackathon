@@ -1,6 +1,7 @@
 var myApp = angular.module('myApp', ['ngRoute']);
 
-var myController = myApp.controller('myController', function($scope, $http){
+var myController = myApp.controller('myController', function($scope){
+
     $scope.data = {
         features: [{
             icon: '',
@@ -14,7 +15,7 @@ var myController = myApp.controller('myController', function($scope, $http){
         },{
             icon: '',
             title: '',
-            id: 0,
+            id: 1,
             description: '',
             upvotes: 0,
             downvotes: 0,
@@ -23,7 +24,7 @@ var myController = myApp.controller('myController', function($scope, $http){
         },{
             icon: '',
             title: '',
-            id: 0,
+            id: 2,
             description: '',
             upvotes: 0,
             downvotes: 0,
@@ -32,7 +33,7 @@ var myController = myApp.controller('myController', function($scope, $http){
         },{
             icon: '',
             title: '',
-            id: 0,
+            id: 3,
             description: '',
             upvotes: 0,
             downvotes: 0,
@@ -41,7 +42,7 @@ var myController = myApp.controller('myController', function($scope, $http){
         },{
             icon: '',
             title: '',
-            id: 0,
+            id: 4,
             description: '',
             upvotes: 0,
             downvotes: 0,
@@ -53,6 +54,7 @@ var myController = myApp.controller('myController', function($scope, $http){
             var upvotes = $scope.data.features[whichFeature].upvotes++;
             var downvotes = $scope.data.features[whichFeature].downvotes;
             $scope.data.features[whichFeature].score = $scope.data.score(upvotes, downvotes);
+            $scope.socket.emit('upvote', whichFeature);
         },
         downvote : function(id){
             var whichFeature = parseInt(id);
@@ -67,30 +69,39 @@ var myController = myApp.controller('myController', function($scope, $http){
         select : function(id){
             $scope.view.main = false;
             $scope.view.feature = id;
+        },
+        back : function(){
+            $scope.view.main = true;
+            $scope.view.feature = null;
         }
     };
     $scope.view = {
       main: true
     };
+
     $scope.socket = function(){
-        socket = io.connect('http://localhost:3000');
+        var socket = io.connect('http://localhost:3000');
         socket.on('hello', function(data){
-           socket.emit('get features');
+            socket.emit('get features');
         });
         socket.on('features', function(data){
            console.log(data);
             for(var i = 0;i<data.length;i++){
-                $scope.data.features[i].icon = data[i].icon;
-                $scope.data.features[i].id = data[i].id;
-                $scope.data.features[i].description = data[i].description;
-                $scope.data.features[i].upvotes = data[i].upvotes;
-                $scope.data.features[i].downvotes = data[i].downvotes;
-                $scope.data.features[i].comments = data[i].comments;
-                $scope.data.features[i].score = data[i].score;
-                $scope.data.features[i].title = data[i].title;
+                for(var j = 0; j< $scope.data.features.length;j++) {
+                    if(data[i].id == $scope.data.features[j].id) {
+                        $scope.data.features[j].icon = data[i].icon;
+                        $scope.data.features[j].id = data[i].id;
+                        $scope.data.features[j].description = data[i].description;
+                        $scope.data.features[j].upvotes = data[i].upvotes;
+                        $scope.data.features[j].downvotes = data[i].downvotes;
+                        $scope.data.features[j].comments = data[i].comments;
+                        $scope.data.features[j].score = data[i].score;
+                        $scope.data.features[j].title = data[i].title;
+                    }
+                }
             }
 
         });
-        return socket;
+       return socket;
     }
 });

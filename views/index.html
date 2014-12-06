@@ -49,6 +49,7 @@
             <p class="label label-success count">{{feature.upvotes}}</p>
             <p class="label label-danger count">{{feature.downvotes}}</p>
         </div>
+
         <div id="{{feature.id}}" class="feature-details" ng-show="view.feature == feature.id">
             <p>{{feature.description}}</p>
 
@@ -58,13 +59,13 @@
                 <p>{{comment.name}}:&nbsp{{comment.comment}}</p>
             </div>
             <form>
-                <input type="text" placeholder="enter your name" required>
+                <input type="text" placeholder="enter your name" required><br>
                 <input type="text" placeholder="enter your comment" required>
                 <button class="btn btn-lg btn-success">submit</button>
             </form>
         </div>
     </div>
-
+    <button class="btn btn-lg btn-warning back" ng-show="!view.main" ng-click="data.back()">back</button>
 </div>
 </body>
 </html>

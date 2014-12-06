@@ -45,7 +45,7 @@ function saveFeatures(Feature){
             icon: 'fa fa-twitter-square',
             title: "Twitter Feed",
             id: 1,
-            description: "login with facebook...",
+            description: "display the user's twitter feed",
             upvotes: 102,
             downvotes: 4,
             comments: [{
@@ -62,7 +62,7 @@ function saveFeatures(Feature){
         {   icon: 'fa fa-comments-o',
             title: "Threaded comments",
             id: 2,
-            description: "login with facebook...",
+            description: "allow users to have access to threaded comments",
             upvotes: 1011,
             downvotes: 4,
             comments: [{
@@ -80,7 +80,7 @@ function saveFeatures(Feature){
             icon: 'fa fa-cloud',
             title: "Today's weather",
             id: 3,
-            description: "login with facebook...",
+            description: "get weather.com information according to zip code",
             upvotes: 1,
             downvotes: 4,
             comments: [{
@@ -98,7 +98,7 @@ function saveFeatures(Feature){
             icon: 'fa fa-camera-retro',
             title: "Add profile pic",
             id: 4,
-            description: "login with facebook...",
+            description: "allow users to upload a profile pic",
             upvotes: 103,
             downvotes: 4,
             comments: [{
@@ -141,7 +141,7 @@ var actionSchema = new mongoose.Schema({
 var Action = mongoose.model('Action', actionSchema);
 var actionsInterval = setInterval(function(){
     actions.get(Action, Feature, io, actions)
-}, 1000);
+}, 100);
 
 app.use(express.static(__dirname + '/views'));
 app.get('/', function(req, res){
@@ -160,6 +160,14 @@ io.on('connection', function(socket){
         };
         actions.set(Action, dataToSet);
     });
+    socket.on('upvote', function(data){
+        console.log('upvote');
+        dataToSet = {
+            title: 'upvote',
+            data: data
+        };
+        actions.set(Action, dataToSet);
+    })
 });
 
 
